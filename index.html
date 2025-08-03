@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tick Construction Ltd - We Build What Matters</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        scroll-behavior: smooth;
+      }
+      /* Custom scrollbar for better aesthetics */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #0f172a; /* Darker blue */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #1e293b; /* Slightly lighter darker blue */
+      }
+
+      /* Custom utility for new brand colors */
+      .bg-primary-dark {
+        background-color: #0f172a; /* Slate 900 */
+      }
+      .text-accent-gold {
+        color: #eab308; /* Amber 500 */
+      }
+      .bg-accent-gold {
+        background-color: #eab308; /* Amber 500 */
+      }
+      .border-accent-gold {
+        border-color: #eab308; /* Amber 500 */
+      }
+      .hover\:bg-primary-darker:hover {
+        background-color: #1e293b; /* Slate 800 */
+      }
+      .hover\:bg-accent-darker:hover {
+        background-color: #d9a000; /* Darker Amber */
+      }
+
+      /* Keyframe animations */
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Apply animations */
+      .animate-fade-in-down {
+        animation: fadeInDown 1s ease-out forwards;
+      }
+
+      .animate-fade-in-up {
+        animation: fadeInUp 1s ease-out forwards;
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 1s ease-out forwards;
+      }
+
+      /* Carousel specific styles */
+      .carousel-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+      }
+      .carousel-images {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+      }
+      .carousel-image {
+        min-width: 100%;
+        height: 300px; /* Fixed height for consistency */
+        object-fit: cover;
+      }
+      .carousel-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(15, 23, 42, 0.7); /* primary-dark with opacity */
+        color: #eab308; /* accent-gold */
+        padding: 10px;
+        border-radius: 9999px; /* fully rounded */
+        cursor: pointer;
+        z-index: 10;
+        transition: background-color 0.3s ease;
+        border: none;
+      }
+      .carousel-button:hover {
+        background-color: rgba(30, 41, 59, 0.9); /* Slightly darker */
+      }
+      .carousel-button-prev {
+        left: 10px;
+      }
+      .carousel-button-next {
+        right: 10px;
+      }
+      .carousel-dots {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px; /* space between dots */
+        z-index: 10;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+      .dot.active {
+        background-color: #eab308; /* accent-gold */
+        transform: scale(1.2);
+      }
+
+      /* --- Navigation Menu Improvements --- */
+
+      /* Mobile menu styles: hidden by default, transforms into view */
+      #nav-links {
+        transform: translateY(-100%); /* Start off-screen above */
+        opacity: 0;
+        pointer-events: none; /* Disable interaction when hidden */
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        @apply fixed top-16 left-0 w-full bg-primary-dark lg:relative lg:top-auto lg:left-auto lg:w-auto lg:bg-transparent lg:p-0;
+      }
+
+      /* State when mobile menu is open */
+      #nav-links.is-open {
+        transform: translateY(0); /* Slide into view */
+        opacity: 1;
+        pointer-events: auto; /* Enable interactions */
+        @apply flex flex-col items-center space-y-4 py-8;
+      }
+
+      /* Ensure desktop menu is always visible and correctly styled */
+      @media (min-width: 1024px) {
+        #nav-links {
+          transform: translateY(0);
+          opacity: 1;
+          pointer-events: auto;
+          @apply flex flex-row space-y-0 space-x-4; /* Reset mobile specific flex/spacing */
+        }
+      }
+
+      /* Nav link specific styling for desktop border effect */
+      .nav-link {
+        @apply relative py-2 px-4; /* Add padding for border space */
+        color: white; /* Default text color */
+      }
+      .nav-link::after {
+        content: "";
+        @apply absolute bottom-0 left-0 w-full h-[2px] bg-accent-gold transform scale-x-0 transition-transform duration-300;
+        transform-origin: center;
+      }
+      .nav-link:hover::after,
+      .nav-link.active::after {
+        transform: scale-x(1);
+      }
+      /* Ensure no bottom border on mobile links */
+      @media (max-width: 1023px) {
+        .nav-link::after {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Navbar -->
+    <nav
+      class="bg-primary-dark p-4 shadow-xl fixed w-full z-50"
+      role="navigation"
+      aria-label="Main navigation"
+    >
+      <div
+        class="container mx-auto flex justify-between items-center flex-wrap"
+      >
+        <a
+          href="#home"
+          class="flex items-center text-white text-2xl font-bold rounded-md px-3 py-2"
+          aria-label="Home - Tick Construction Ltd"
+        >
+          <img
+            src="images/Logo Icon a invert.png"
+            alt="Tick Construction Logo"
+            class="h-10 w-10 mr-3 rounded-md shadow-lg"
+          />
+          TICK <span class="text-accent-gold">CONSTRUCTION</span>
+        </a>
+        <button
+          id="menu-button"
+          class="text-white lg:hidden focus:outline-none p-2 rounded-md hover:bg-slate-700 transition duration-300"
+          aria-label="Open mobile menu"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <svg
+            class="w-8 h-8"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            ></path>
+          </svg>
+        </button>
+        <div
+          id="nav-links"
+          class="hidden lg:flex flex-grow lg:flex-row lg:items-center lg:justify-end w-full lg:w-auto mt-4 lg:mt-0"
+        >
+          <a href="#home" class="nav-link text-white text-lg font-medium"
+            >Home</a
+          >
+          <a href="#about" class="nav-link text-white text-lg font-medium"
+            >About Us</a
+          >
+          <a href="#services" class="nav-link text-white text-lg font-medium"
+            >Services</a
+          >
+          <a href="#portfolio" class="nav-link text-white text-lg font-medium"
+            >Portfolio</a
+          >
+          <a href="#team" class="nav-link text-white text-lg font-medium"
+            >Our Team</a
+          >
+          <a href="#contact" class="nav-link text-white text-lg font-medium"
+            >Contact</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      id="home"
+      class="relative bg-primary-dark text-white py-24 md:py-32 lg:py-40 flex items-center justify-center min-h-screen overflow-hidden"
+    >
+      <!-- Background image/overlay for visual appeal -->
+      <div
+        class="absolute inset-0 bg-cover bg-center opacity-30 transform scale-105"
+        style="background-image: url('images/background1.jpg')"
+      ></div>
+      <div class="container mx-auto px-6 text-center relative z-10">
+        <h1
+          class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 animate-fade-in-down"
+          style="animation-delay: 0.1s"
+        >
+          TICK <span class="text-accent-gold">CONSTRUCTION</span> LTD
+        </h1>
+        <p
+          class="text-xl md:text-2xl lg:text-3xl font-light mb-8 max-w-3xl mx-auto animate-fade-in-up"
+          style="animation-delay: 0.3s"
+        >
+          "We Build What Matters."
+        </p>
+        <p
+          class="text-md md:text-lg mb-10 max-w-4xl mx-auto opacity-0 animate-fade-in"
+          style="animation-delay: 0.5s"
+        >
+          Founded in May 2025, Tick Construction Ltd is powered by a team of
+          seasoned engineers with the experience and passion to build with
+          excellence. We deliver top-quality results, on time, and with
+          integrity.
+        </p>
+        <a
+          href="#contact"
+          class="bg-accent-gold text-primary-dark px-8 py-4 rounded-full text-lg font-semibold hover:bg-accent-darker transition duration-300 shadow-lg inline-block opacity-0 animate-fade-in-up"
+          style="animation-delay: 0.7s"
+        >
+          Get a Quote Today
+        </a>
+      </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-16 md:py-24 bg-white animate-fade-in">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center mb-12 text-primary-dark">
+          About Us
+        </h2>
+        <div class="flex flex-col lg:flex-row items-center lg:space-x-12">
+          <div class="lg:w-1/2 mb-8 lg:mb-0">
+            <img
+              src="images/About.png"
+              alt="About Tick Construction"
+              class="rounded-lg shadow-xl w-full h-auto object-cover transform transition duration-500 hover:scale-105"
+            />
+          </div>
+          <div class="lg:w-1/2">
+            <p class="text-lg leading-relaxed mb-6">
+              Tick Construction Ltd, officially registered in May 2025, is a
+              forward-thinking and dynamic construction company. We are founded
+              on the seasoned experience of four professional engineers, each
+              bringing a wealth of hands-on expertise in building design, site
+              management, and civil infrastructure.
+            </p>
+            <p class="text-lg leading-relaxed mb-6">
+              We are committed to delivering exceptional construction solutions
+              that are grounded in technical excellence, professional integrity,
+              and client-centered service. From residential projects and
+              commercial buildings to renovations and infrastructure, our team
+              is equipped to handle each phase with precision and
+              accountability.
+            </p>
+            <h3 class="text-2xl font-semibold mb-4 text-primary-dark">
+              Our Promise:
+            </h3>
+            <p class="text-xl font-bold text-accent-gold mb-8">
+              "Build it right. Build it once. Build it with Tick."
+            </p>
+            <div class="mt-8">
+              <h3 class="text-2xl font-semibold mb-4 text-primary-dark">
+                Mission & Vision
+              </h3>
+              <ul class="list-disc list-inside text-lg space-y-2">
+                <li>
+                  <strong class="text-accent-gold">Mission:</strong> To build
+                  safe, sustainable, and innovative structures that stand the
+                  test of time, while exceeding client expectations.
+                </li>
+                <li>
+                  <strong class="text-accent-gold">Vision:</strong> To become a
+                  trusted and leading construction company in Rwanda and across
+                  Africa, recognized for integrity, quality, and efficiency.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div
+          class="mt-16 bg-primary-dark text-white p-8 rounded-lg shadow-xl border-t-4 border-accent-gold transform transition duration-500 hover:scale-[1.01]"
+        >
+          <h3 class="text-3xl font-bold text-center mb-6">
+            From Our Managing Director
+          </h3>
+          <div class="flex flex-col md:flex-row items-center md:space-x-8">
+            <div class="md:w-1/4 mb-6 md:mb-0 text-center">
+              <img
+                src="images/Ronald.jpeg"
+                alt="Ronald Ssebagala"
+                class="rounded-full w-36 h-36 object-cover mx-auto mb-4 border-4 border-accent-gold shadow-md"
+              />
+              <p class="font-bold text-xl">Ronald Ssebagala</p>
+              <p class="text-md text-gray-300">Managing Director</p>
+            </div>
+            <div class="md:w-3/4 text-lg">
+              <p class="italic mb-4">
+                "Though Tick Construction is new on paper, our team is rich in
+                experience. Our four founding engineers have walked the path of
+                complex project execution, budget management, and client
+                satisfaction for years. This company is our next step — a place
+                where we bring those skills together to deliver meaningful
+                impact."
+              </p>
+              <p class="italic">
+                "Our mission is to solve construction challenges by focusing on
+                what truly matters:
+                <strong class="text-accent-gold"
+                  >Cost, Quality, and Time.</strong
+                >
+                As Managing Director, I commit to leading this company with
+                integrity, accountability, and innovation, ensuring that each
+                client receives not only a completed structure but a promise
+                fulfilled."
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 md:py-24 bg-gray-100 animate-fade-in">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center mb-12 text-primary-dark">
+          Our Services
+        </h2>
+        <p class="text-lg text-center max-w-3xl mx-auto mb-10">
+          With the right mix of experience, innovation, and professionalism, we
+          ensure every project is delivered with quality, cost-efficiency, and
+          care.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Service Card 1 -->
+          <div
+            class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 border border-gray-200 transform hover:-translate-y-2"
+          >
+            <div class="text-accent-gold mb-4 text-6xl text-center">
+              <svg
+                class="w-20 h-20 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 10h6m-6 4h6m-6 4h6"
+                ></path>
+              </svg>
+            </div>
+            <h3
+              class="text-2xl font-semibold text-center mb-4 text-primary-dark"
+            >
+              General Building Construction
+            </h3>
+            <p class="text-gray-700 text-center">
+              Residential, commercial, and institutional projects from
+              foundation to finish.
+            </p>
+          </div>
+          <!-- Service Card 2 -->
+          <div
+            class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 border border-gray-200 transform hover:-translate-y-2"
+          >
+            <div class="text-accent-gold mb-4 text-6xl text-center">
+              <svg
+                class="w-20 h-20 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                ></path>
+              </svg>
+            </div>
+            <h3
+              class="text-2xl font-semibold text-center mb-4 text-primary-dark"
+            >
+              Renovation & Remodeling
+            </h3>
+            <p class="text-gray-700 text-center">
+              Upgrading and transforming existing structures with precision.
+            </p>
+          </div>
+          <!-- Service Card 3 -->
+          <div
+            class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 border border-gray-200 transform hover:-translate-y-2"
+          >
+            <div class="text-accent-gold mb-4 text-6xl text-center">
+              <svg
+                class="w-20 h-20 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0L6.343 16.657m10.322 0C17.72 15.713 18 14.66 18 13c0-3.314-2.686-6-6-6s-6 2.686-6 6c0 1.66.28 2.713.678 3.657M12 21.25V17m0-4v-4m0-4v-4"
+                ></path>
+              </svg>
+            </div>
+            <h3
+              class="text-2xl font-semibold text-center mb-4 text-primary-dark"
+            >
+              Civil Works & Infrastructure
+            </h3>
+            <p class="text-gray-700 text-center">
+              Roads, drainage, and other essential infrastructure services.
+            </p>
+          </div>
+          <!-- Service Card 4 -->
+          <div
+            class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 border border-gray-200 transform hover:-translate-y-2"
+          >
+            <div class="text-accent-gold mb-4 text-6xl text-center">
+              <svg
+                class="w-20 h-20 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 19V6l12-3v14m-9 0a2 2 0 100 4h.01m-6 0a2 2 0 100 4h.01m-.01-6h.01"
+                ></path>
+              </svg>
+            </div>
+            <h3
+              class="text-2xl font-semibold text-center mb-4 text-primary-dark"
+            >
+              Engineering Consultancy
+            </h3>
+            <p class="text-gray-700 text-center">
+              Expert guidance and on-site quality assurance.
+            </p>
+          </div>
+          <!-- Service Card 5 -->
+          <div
+            class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 border border-gray-200 transform hover:-translate-y-2"
+          >
+            <div class="text-accent-gold mb-4 text-6xl text-center">
+              <svg
+                class="w-20 h-20 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zm12-7H9"
+                ></path>
+              </svg>
+            </div>
+            <h3
+              class="text-2xl font-semibold text-center mb-4 text-primary-dark"
+            >
+              Project Planning & Management
+            </h3>
+            <p class="text-gray-700 text-center">
+              End-to-end coordination for efficient, timely project delivery.
+            </p>
+          </div>
+          <!-- Service Card 6: Tools & Technology -->
+          <div
+            class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 border border-gray-200 transform hover:-translate-y-2"
+          >
+            <div class="text-accent-gold mb-4 text-6xl text-center">
+              <svg
+                class="w-20 h-20 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+              </svg>
+            </div>
+            <h3
+              class="text-2xl font-semibold text-center mb-4 text-primary-dark"
+            >
+              Tools & Technology
+            </h3>
+            <p class="text-gray-700 text-center">
+              Leveraging cutting-edge software like ETABS, ARCHICAD, and
+              advanced surveying tools for precision.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-16 md:py-24 bg-white animate-fade-in">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center mb-12 text-primary-dark">
+          Our Latest Projects
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <!-- Project Card 1: Vista Luxury Apartment (now a carousel) -->
+          <div
+            class="bg-gray-100 rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-[1.02] hover:shadow-xl"
+          >
+            <div id="vista-gallery" class="carousel-container">
+              <div class="carousel-images">
+                <img
+                  src="images/Vista.jpeg"
+                  alt="Vista Luxury Apartment - Exterior 1"
+                  class="carousel-image"
+                />
+                <img
+                  src="images/vista2.jpeg"
+                  alt="Vista Luxury Apartment - Interior 1"
+                  class="carousel-image"
+                />
+                <img
+                  src="images/vista3.jpeg"
+                  alt="Vista Luxury Apartment - Night View"
+                  class="carousel-image"
+                />
+              </div>
+              <button class="carousel-button carousel-button-prev">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  ></path>
+                </svg>
+              </button>
+              <button class="carousel-button carousel-button-next">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </button>
+              <div class="carousel-dots"></div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-2 text-primary-dark">
+                Vista Luxury Apartment
+              </h3>
+              <p class="text-gray-700">
+                Successfully managed the full construction of a residential
+                apartment from foundation to handover, ensuring structural
+                integrity, timely delivery, and high-quality workmanship.
+              </p>
+            </div>
+          </div>
+          <!-- Project Card 2: MKU Classroom Building (now a carousel) -->
+          <div
+            class="bg-gray-100 rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-[1.02] hover:shadow-xl"
+          >
+            <div id="mku-gallery" class="carousel-container">
+              <div class="carousel-images">
+                <img
+                  src="images/mtkenya.jpg"
+                  alt="MKU Classroom - Exterior 1"
+                  class="carousel-image"
+                />
+                <img
+                  src="images/mtkenya2.jpg"
+                  alt="MKU Classroom - Interior 1"
+                  class="carousel-image"
+                />
+                <img
+                  src="images/mtkenya3.jpg"
+                  alt="MKU Classroom - Aerial View"
+                  class="carousel-image"
+                />
+              </div>
+              <button class="carousel-button carousel-button-prev">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  ></path>
+                </svg>
+              </button>
+              <button class="carousel-button carousel-button-next">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </button>
+              <div class="carousel-dots"></div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-2 text-primary-dark">
+                MKU Classroom Building
+              </h3>
+              <p class="text-gray-700">
+                Managed the full construction of the second building at Mount
+                Kigali University—from foundation to final handover. The project
+                included classrooms, administrative spaces, and essential
+                academic facilities.
+              </p>
+            </div>
+          </div>
+          <!-- Project Card 3: Interior and Office Designer (now a carousel) -->
+          <div
+            class="bg-gray-100 rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-[1.02] hover:shadow-xl"
+          >
+            <div id="office-gallery" class="carousel-container">
+              <div class="carousel-images">
+                <img
+                  src="images/office.jpg"
+                  alt="Interior and Office Designer - Office Space 1"
+                  class="carousel-image"
+                />
+                <img
+                  src="images/interior2.jpg"
+                  alt="Interior and Office Designer - Office Space 2"
+                  class="carousel-image"
+                />
+                <img
+                  src="images/interior3.jpg"
+                  alt="Interior and Office Designer - Design Concept"
+                  class="carousel-image"
+                />
+              </div>
+              <button class="carousel-button carousel-button-prev">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  ></path>
+                </svg>
+              </button>
+              <button class="carousel-button carousel-button-next">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </button>
+              <div class="carousel-dots"></div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-2 text-primary-dark">
+                Interior and Office Designer
+              </h3>
+              <p class="text-gray-700">
+                Led the design and execution of functional and modern interior
+                spaces tailored for office use, focusing on optimizing space,
+                improving workflow, and enhancing comfort and productivity.
+              </p>
+            </div>
+          </div>
+          <!-- Project Card 4: Modern Residential House (carousel was already here) -->
+          <div
+            class="bg-gray-100 rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-[1.02] hover:shadow-xl"
+          >
+            <div id="residential-gallery" class="carousel-container">
+              <div class="carousel-images">
+                <img
+                  src="images/Residential.jpg"
+                  alt="Modern Residential House - Exterior"
+                  class="carousel-image"
+                />
+                <img
+                  src="images/Residential2.jpg"
+                  alt="Modern Residential House - Living Room"
+                  class="carousel-image"
+                />
+                <img
+                  src="images/Residential3.jpg"
+                  alt="Modern Residential House - Kitchen"
+                  class="carousel-image"
+                />
+                <!-- Add more residential house images here -->
+              </div>
+              <button class="carousel-button carousel-button-prev">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  ></path>
+                </svg>
+              </button>
+              <button class="carousel-button carousel-button-next">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </button>
+              <div class="carousel-dots"></div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-2 text-primary-dark">
+                Modern Residential House
+              </h3>
+              <p class="text-gray-700">
+                Managed the construction of a modern residential house from
+                foundation to completion, involving structural works, roofing,
+                electrical and plumbing installations, interior finishing, and
+                landscaping.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section
+      id="why-choose-us"
+      class="py-16 md:py-24 bg-primary-dark text-white animate-fade-in"
+    >
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center mb-12 text-white">
+          Why Choose Us?
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <!-- Feature 1 -->
+          <div
+            class="bg-white text-gray-800 p-8 rounded-lg shadow-lg border-b-4 border-accent-gold transform transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+          >
+            <div class="flex items-center mb-4">
+              <div
+                class="bg-accent-gold p-3 rounded-full mr-4 text-primary-dark text-2xl"
+              >
+                <svg
+                  class="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 20h2a2 2 0 002-2V7a2 2 0 00-2-2h-2m-4 13V5a2 2 0 00-2-2H9a2 2 0 00-2 2v13m-3 0h.01M6 19h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-semibold text-primary-dark">
+                Skilled and Qualified Team
+              </h3>
+            </div>
+            <p class="text-gray-700">
+              Our core strength lies in our people. With a foundation built by
+              four experienced engineers, our team brings deep technical
+              expertise and a solid understanding of industry best practices to
+              every project.
+            </p>
+          </div>
+          <!-- Feature 2 -->
+          <div
+            class="bg-white text-gray-800 p-8 rounded-lg shadow-lg border-b-4 border-accent-gold transform transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+          >
+            <div class="flex items-center mb-4">
+              <div
+                class="bg-accent-gold p-3 rounded-full mr-4 text-primary-dark text-2xl"
+              >
+                <svg
+                  class="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                  ></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-semibold text-primary-dark">
+                Passion for Excellence and Quality
+              </h3>
+            </div>
+            <p class="text-gray-700">
+              We don’t settle for "good enough." Every project is a reflection
+              of our brand, and we pursue engineering excellence and top-quality
+              results from concept to completion. We build like it’s our own.
+            </p>
+          </div>
+          <!-- Feature 3 -->
+          <div
+            class="bg-white text-gray-800 p-8 rounded-lg shadow-lg border-b-4 border-accent-gold transform transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+          >
+            <div class="flex items-center mb-4">
+              <div
+                class="bg-accent-gold p-3 rounded-full mr-4 text-primary-dark text-2xl"
+              >
+                <svg
+                  class="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11.125 15.625l-3.375 1.5M15.375 7.125l-3.375 1.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-semibold text-primary-dark">
+                Commitment to Client Satisfaction
+              </h3>
+            </div>
+            <p class="text-gray-700">
+              Your vision matters. We take the time to understand your needs,
+              offer professional guidance, and remain transparent throughout the
+              project lifecycle—ensuring you’re satisfied every step of the way.
+            </p>
+          </div>
+          <!-- Feature 4 -->
+          <div
+            class="bg-white text-gray-800 p-8 rounded-lg shadow-lg border-b-4 border-accent-gold transform transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+          >
+            <div class="flex items-center mb-4">
+              <div
+                class="bg-accent-gold p-3 rounded-full mr-4 text-primary-dark text-2xl"
+              >
+                <svg
+                  class="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m5.618-4.785a2.25 2.25 0 011.025 1.39l.625 4.577a.75.75 0 01-1.079.792L12 13.5l-6.236 2.062a.75.75 0 01-1.079-.792l.625-4.577a2.25 2.25 0 011.025-1.39C8.653 4.285 10.428 3 12 3s3.347 1.285 4.382 3.062z"
+                  ></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-semibold text-primary-dark">
+                Reliable Project Delivery
+              </h3>
+            </div>
+            <p class="text-gray-700">
+              We respect deadlines and manage projects efficiently to avoid
+              delays. Our streamlined workflow ensures we deliver what we
+              promise, when we promise it.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Team Section -->
+    <section id="team" class="py-16 md:py-24 bg-gray-100 animate-fade-in">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center mb-12 text-primary-dark">
+          Meet Our Team
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Team Member 1 -->
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg text-center transform transition duration-300 hover:scale-[1.03] hover:shadow-xl"
+          >
+            <img
+              src="images/Ronald.jpeg"
+              alt="Ronald Ssebagala"
+              class="rounded-full w-32 h-32 object-cover mx-auto mb-4 border-4 border-accent-gold shadow-md"
+            />
+            <h3 class="text-xl font-semibold text-primary-dark">
+              Ronald Ssebagala
+            </h3>
+            <p class="text-accent-gold font-medium">
+              Managing Director, Civil, Structural Engineer
+            </p>
+            <p class="text-gray-600 text-sm mt-2">
+              Ambitious and dedicated civil and building engineer with strong
+              practical and technical skills in construction engineering and
+              project management.
+            </p>
+          </div>
+          <!-- Team Member 2 -->
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg text-center transform transition duration-300 hover:scale-[1.03] hover:shadow-xl"
+          >
+            <img
+              src="images/peter1.jpg"
+              alt="Peter Otundi"
+              class="rounded-full w-32 h-32 object-cover mx-auto mb-4 border-4 border-accent-gold shadow-md"
+            />
+            <h3 class="text-xl font-semibold text-primary-dark">
+              Peter Otundi
+            </h3>
+            <p class="text-accent-gold font-medium">
+              Technical Director, Civil Engineer
+            </p>
+            <p class="text-gray-600 text-sm mt-2">
+              Experienced civil engineer skilled in structural design, cost
+              evaluation, and risk assessment for construction projects.
+            </p>
+          </div>
+          <!-- Team Member 3 -->
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg text-center transform transition duration-300 hover:scale-[1.03] hover:shadow-xl"
+          >
+            <img
+              src="images/will.jpeg"
+              alt="Katende Willy"
+              class="rounded-full w-32 h-32 object-cover mx-auto mb-4 border-4 border-accent-gold shadow-md"
+            />
+            <h3 class="text-xl font-semibold text-primary-dark">
+              Katende Willy
+            </h3>
+            <p class="text-accent-gold font-medium">
+              Projects Manager & Quantity Surveyor
+            </p>
+            <p class="text-gray-600 text-sm mt-2">
+              A meticulous Projects Manager and Quantity Surveyor, ensuring
+              projects are delivered on time, within budget, and to the highest
+              standards of quality.
+            </p>
+          </div>
+          <!-- Team Member 4 -->
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg text-center transform transition duration-300 hover:scale-[1.03] hover:shadow-xl"
+          >
+            <img
+              src="images/ismail.jpeg"
+              alt="Ismail Sebandeke"
+              class="rounded-full w-32 h-32 object-cover mx-auto mb-4 border-4 border-accent-gold shadow-md"
+            />
+            <h3 class="text-xl font-semibold text-primary-dark">
+              Ismail Sebandeke
+            </h3>
+            <p class="text-accent-gold font-medium">
+              Plumbing & Building Services
+            </p>
+            <p class="text-gray-600 text-sm mt-2">
+              Specializes in the design, installation, and maintenance of
+              essential building services, ensuring functionality and efficiency
+              in every project.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 md:py-24 bg-white animate-fade-in">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center mb-12 text-primary-dark">
+          Let's Work Together
+        </h2>
+        <div class="flex flex-col lg:flex-row lg:space-x-12 items-start">
+          <!-- Changed items-center to items-start for better vertical alignment on larger screens -->
+          <div class="lg:w-1/2 mb-10 lg:mb-0">
+            <p class="text-lg leading-relaxed mb-6">
+              At Tick Construction Ltd, we believe every successful project
+              begins with a strong partnership. Whether you’re planning a
+              residential build, a commercial project, or looking for expert
+              engineering support — we’re ready to bring your vision to life.
+            </p>
+            <p class="text-lg leading-relaxed mb-6">
+              Reach out to us today. Let’s discuss how we can build something
+              exceptional — together.
+            </p>
+            <div class="space-y-6">
+              <!-- Increased space-y for better readability -->
+              <div class="flex items-center text-lg">
+                <svg
+                  class="w-8 h-8 text-accent-gold mr-4 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm16 0H5v14h14V5zM8 7h8v2H8V7zm0 4h8v2H8v-2zm0 4h8v2H8v-2z"
+                  ></path>
+                </svg>
+                <span class="font-semibold text-primary-dark"
+                  >Headquarters:</span
+                >
+                Kicukiro, Kigali, Rwanda
+              </div>
+              <div class="flex items-center text-lg">
+                <svg
+                  class="w-8 h-8 text-accent-gold mr-4 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 8.75a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75zM3 15.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75zM12 21a9 9 0 100-18 9 9 0 000 18z"
+                  ></path>
+                </svg>
+                <span class="font-semibold text-primary-dark">Phone:</span>
+                +250-785-517362
+              </div>
+              <div class="flex items-center text-lg">
+                <svg
+                  class="w-8 h-8 text-accent-gold mr-4 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2.003 5.884L10 11l7.997-5.116A2 2 0 0016 4H8a2 2 0 00-1.997 1.884zM18 8.118l4 2.5V14l-4 2.5V8.118zM2 14v-3.382l4-2.5V16.5l-4-2.5zM12 17l-8 5H20l-8-5z"
+                  ></path>
+                </svg>
+                <span class="font-semibold text-primary-dark">Email:</span>
+                tickconstructionltd@gmail.com
+              </div>
+              <div class="flex items-center text-lg">
+                <svg
+                  class="w-8 h-8 text-accent-gold mr-4 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm-1-12h2v6h-2zM11 7h2v2h-2zm0 4h2v2h-2zm0 4h2v2h-2z"
+                >
+              </div>
+            </div>
+          </div>
+          <div class="lg:w-1/2 w-full">
+            <!-- Simple Contact Form Placeholder -->
+            <form
+              action="mailto:tickconstructionltd@gmail.com"
+              method="post"
+              enctype="text/plain"
+              class="bg-gray-50 p-8 rounded-lg shadow-xl border border-gray-200 transform transition duration-300 hover:shadow-2xl"
+            >
+              <div class="mb-5">
+                <label
+                  for="name"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  >Your Name</label
+                >
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-accent-gold focus:border-transparent transition duration-200"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div class="mb-5">
+                <label
+                  for="email"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  >Your Email</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-accent-gold focus:border-transparent transition duration-200"
+                  placeholder="john.doe@example.com"
+                />
+              </div>
+              <div class="mb-5">
+                <label
+                  for="message"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  >Message</label
+                >
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="5"
+                  class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-accent-gold focus:border-transparent transition duration-200"
+                  placeholder="Tell us about your project..."
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="bg-accent-gold text-primary-dark px-6 py-3 rounded-md font-semibold hover:bg-accent-darker transition duration-300 w-full text-lg shadow-md hover:shadow-lg"
+              >
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary-dark text-white py-8">
+      <div class="container mx-auto px-6 text-center">
+        <p class="mb-4 text-lg">
+          &copy; 2025 Tick Construction Ltd. All rights reserved.
+        </p>
+        <div class="flex justify-center space-x-6">
+          <!-- Placeholder for social media icons (Facebook, Instagram, LinkedIn) -->
+          <a
+            href="#"
+            class="text-white hover:text-accent-gold transition duration-300 transform hover:scale-110"
+            aria-label="Facebook"
+          >
+            <svg
+              class="w-7 h-7"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.247 0-1.625.777-1.625 1.56V12h2.773l-.443 2.89h-2.33V22H12c5.523 0 10-4.477 10-10z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </a>
+          <a
+            href="#"
+            class="text-white hover:text-accent-gold transition duration-300 transform hover:scale-110"
+            aria-label="Instagram"
+          >
+            <svg
+              class="w-7 h-7"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 3.75c-4.506 0-8.25 3.744-8.25 8.25s3.744 8.25 8.25 8.25 8.25-3.744 8.25-8.25-3.744-8.25-8.25-8.25zM12 2a10 10 10 0110 10c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm3.633 4.417c-1.096-.11-2.19-.11-3.284 0-1.094.11-2.188.423-3.284.943-1.094.52-2.188 1.25-3.284 2.19-1.094.94-2.188 2.084-2.188 3.284 0 1.2.94 2.188 2.188 3.284 1.096.94 2.19 1.67 3.284 2.19 1.096.52 2.19.833 3.284.943 1.094.11 2.188.11 3.284 0 1.094-.11 2.188-.423 3.284-.943 1.094-.52 2.188-1.25 3.284-2.19 1.094-.94 2.188-2.084 2.188-3.284 0-1.2-.94-2.188-2.188-3.284-1.096-.94-2.19-1.67-3.284-2.19-1.096-.52-2.19-.833-3.284-.943zM12 15a3 3 0 100-6 3 3 0 000 6z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </a>
+          <a
+            href="#"
+            class="text-white hover:text-accent-gold transition duration-300 transform hover:scale-110"
+            aria-label="LinkedIn"
+          >
+            <svg
+              class="w-7 h-7"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.529-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // Get the target section ID
+          const targetId = this.getAttribute("href").substring(1);
+          const targetElement = document.getElementById(targetId);
+
+          if (targetElement) {
+            // Calculate offset to account for fixed header
+            const headerOffset = document.querySelector("nav").offsetHeight;
+            const elementPosition =
+              targetElement.getBoundingClientRect().top + window.scrollY;
+            const offsetPosition = elementPosition - headerOffset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Toggle mobile menu
+      const menuButton = document.getElementById("menu-button");
+      const navLinks = document.getElementById("nav-links");
+
+      // Function to set initial mobile menu state and handle resize
+      function setInitialMobileMenuState() {
+        if (window.innerWidth < 1024) {
+          // On mobile, ensure it starts hidden and without desktop flex styles
+          navLinks.classList.remove(
+            "lg:flex",
+            "lg:flex-row",
+            "lg:items-center",
+            "lg:justify-end",
+            "lg:w-auto",
+            "lg:mt-0"
+          );
+          navLinks.classList.add("hidden"); // Use 'hidden' to control initial display on mobile
+          navLinks.classList.remove("is-open"); // Ensure it's not 'is-open'
+          menuButton.setAttribute("aria-expanded", "false");
+        } else {
+          // On desktop, ensure it's always visible and correctly styled
+          navLinks.classList.remove(
+            "hidden",
+            "flex",
+            "flex-col",
+            "items-center",
+            "space-y-4",
+            "is-open",
+            "py-8"
+          );
+          navLinks.classList.add(
+            "lg:flex",
+            "lg:flex-row",
+            "lg:items-center",
+            "lg:justify-end",
+            "lg:w-auto",
+            "lg:mt-0"
+          );
+          navLinks.style.transform = "translateY(0)"; // Ensure transform is reset for desktop
+          navLinks.style.opacity = "1"; // Ensure opacity is reset for desktop
+          menuButton.setAttribute("aria-expanded", "false"); // Not expanded on desktop
+        }
+      }
+
+      // Call on load
+      setInitialMobileMenuState();
+      // Call on resize to handle breakpoint changes
+      window.addEventListener("resize", setInitialMobileMenuState);
+
+      menuButton.addEventListener("click", () => {
+        const isExpanded = menuButton.getAttribute("aria-expanded") === "true";
+        menuButton.setAttribute("aria-expanded", !isExpanded);
+
+        // Toggle the 'is-open' class for visual transition
+        navLinks.classList.toggle("is-open");
+        // For mobile, also toggle 'hidden' for initial display control (important on first load)
+        if (window.innerWidth < 1024) {
+          navLinks.classList.toggle("hidden");
+        }
+      });
+
+      // Close mobile menu when a link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          if (
+            navLinks.classList.contains("is-open") &&
+            window.innerWidth < 1024
+          ) {
+            navLinks.classList.remove("is-open");
+            navLinks.classList.add("hidden"); // Hide after transition on mobile
+            menuButton.setAttribute("aria-expanded", "false"); // Reset aria-expanded on close
+          }
+        });
+      });
+
+      // Highlight active navigation link on scroll
+      const sections = document.querySelectorAll("section");
+      const navLi = document.querySelectorAll(".nav-link");
+
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+          // Adjust offset for sticky header
+          const sectionTop =
+            section.offsetTop - document.querySelector("nav").offsetHeight - 1;
+          const sectionHeight = section.clientHeight;
+          if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+            current = section.getAttribute("id");
+          }
+        });
+
+        navLi.forEach((li) => {
+          li.classList.remove("active");
+          if (li.href.includes(`#${current}`)) {
+            li.classList.add("active");
+          }
+        });
+      });
+
+      // Intersection Observer for scroll-reveal animations
+      const fadeInElements = document.querySelectorAll(".animate-fade-in");
+      const fadeInDownElements = document.querySelectorAll(
+        ".animate-fade-in-down"
+      );
+      const fadeInUpElements = document.querySelectorAll(".animate-fade-in-up");
+
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1, // Trigger when 10% of the element is visible
+      };
+
+      const observerCallback = (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+            entry.target.style.animationPlayState = "running"; // Start the animation
+            observer.unobserve(entry.target); // Stop observing once animated
+          }
+        });
+      };
+
+      const sectionObserver = new IntersectionObserver(
+        observerCallback,
+        observerOptions
+      );
+
+      fadeInElements.forEach((el) => {
+        el.style.opacity = "0"; // Hide initially for animation
+        sectionObserver.observe(el);
+      });
+      fadeInDownElements.forEach((el) => {
+        el.style.opacity = "0"; // Hide initially for animation
+        el.style.transform = "translateY(-20px)";
+        sectionObserver.observe(el);
+      });
+      fadeInUpElements.forEach((el) => {
+        el.style.opacity = "0"; // Hide initially for animation
+        el.style.transform = "translateY(20px)";
+        sectionObserver.observe(el);
+      });
+
+      // Carousel / Image Album Logic
+      function initializeCarousel(galleryId) {
+        const gallery = document.getElementById(galleryId);
+        if (!gallery) return; // Exit if gallery not found
+
+        const imagesContainer = gallery.querySelector(".carousel-images");
+        const images = gallery.querySelectorAll(".carousel-image");
+        const prevButton = gallery.querySelector(".carousel-button-prev");
+        const nextButton = gallery.querySelector(".carousel-button-next");
+        const dotsContainer = gallery.querySelector(".carousel-dots");
+
+        let currentIndex = 0;
+        const totalImages = images.length;
+
+        // Clear existing dots to prevent duplicates on re-initialization
+        dotsContainer.innerHTML = "";
+
+        // Create dots
+        for (let i = 0; i < totalImages; i++) {
+          const dot = document.createElement("span");
+          dot.classList.add("dot");
+          dot.addEventListener("click", () => showSlide(i));
+          dotsContainer.appendChild(dot);
+        }
+        const dots = dotsContainer.querySelectorAll(".dot");
+
+        function showSlide(index) {
+          // Loop around if index goes out of bounds
+          currentIndex = (index + totalImages) % totalImages;
+
+          // Update transform for smooth horizontal slide
+          imagesContainer.style.transform = `translateX(-${
+            currentIndex * 100
+          }%)`;
+
+          // Update active dot
+          dots.forEach((dot, i) => {
+            dot.classList.toggle("active", i === currentIndex);
+          });
+        }
+
+        function nextSlide() {
+          showSlide(currentIndex + 1);
+        }
+
+        function prevSlide() {
+          showSlide(currentIndex - 1);
+        }
+
+        // Add event listeners for navigation
+        prevButton.addEventListener("click", prevSlide);
+        nextButton.addEventListener("click", nextSlide);
+
+        // Initial display
+        showSlide(currentIndex);
+      }
+
+      // Initialize all carousels found on the page
+      document.addEventListener("DOMContentLoaded", () => {
+        const allCarousels = document.querySelectorAll(".carousel-container");
+        allCarousels.forEach((carousel) => {
+          initializeCarousel(carousel.id);
+        });
+      });
+    </script>
+  </body>
+</html>
